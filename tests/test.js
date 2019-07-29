@@ -1,5 +1,5 @@
-var core=require("../es5/CoreObject");
-ornek=new core.coreObject();
+var core=require("../bundled/CoreObject");
+ornek=new core.CoreObject();
 ornek.on("click",function fonk(){
     console.log("merhaba");
 });

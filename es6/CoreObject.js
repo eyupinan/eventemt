@@ -1,4 +1,4 @@
-class coreObject{
+class CoreObject{
     
     constructor(element){
         this.element=element;
@@ -106,6 +106,8 @@ class coreObject{
         },this);
     }
 }
+
 module.exports={
-    coreObject:coreObject,
+    CoreObject:CoreObject,
 }
+

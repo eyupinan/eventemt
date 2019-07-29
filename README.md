@@ -5,7 +5,7 @@
 The library is available as an npm package. To install the package run:
 
 ```
-npm install evemt
+npm install eventemt
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ evnt.emit(eventName,...args);
 ## Example Code
 
 ```javascript
-var core = require('evemt')
+var core = require('eventemt')
 
 var evnt = new core.CoreObject()
 function func1(param){

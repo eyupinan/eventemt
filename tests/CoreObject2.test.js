@@ -11,7 +11,7 @@ class Test{
         return this.randomVariable;
     }
 }
-/*describe("event objesi",function(){
+describe("event objesi",function(){
     it("obje oluşturuldu ise",function(){
         var event = new CoreObject();
     });
@@ -90,7 +90,7 @@ describe("on ve once",function(){
         assert.equal(testObject1.getRandomVariable(),2);
         assert.equal(testObject2.getRandomVariable(),1);
     });
-});*/
+});
 describe("emit callback",function(){
     var event =new CoreObject();
     var testObject=new Test(0);

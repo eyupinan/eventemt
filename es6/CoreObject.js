@@ -84,7 +84,6 @@ class CoreObject{
             }
             // burada emit işlemi tamamlandı ise resolve çağırılıyor bu sistemin sorunu çağırılmak istenen fonksiyonların tamamlanıp tamamlanmadığını kontrol etmiyor
             if (this.listenerCount(event)===calledCount){
-                console.log("geldi eşleşme");
                 resolve(1);            
             }
         });

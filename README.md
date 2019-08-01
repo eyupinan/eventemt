@@ -1,5 +1,7 @@
 # Event Emitter
 
+[![Build Status](https://travis-ci.org/eyupinan/eventemt.svg?branch=master)](https://travis-ci.org/eyupinan/eventemt)
+
 ## Install
 
 The library is available as an npm package. To install the package run:

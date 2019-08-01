@@ -51,6 +51,7 @@ class CoreObject{
                 }
             },this);
     }
+    
     async emit(event,...params){
         // bu kısımda evente verilmiş olan fonksiyonlara göre parametreler alınır
         // mutualParams değişkeni bütün fonksiyonlara gönderilecek olan değişkenleri içerir liste haline parametre olarak alınır
@@ -61,6 +62,7 @@ class CoreObject{
                 var calledCount=0;
                 this.listenerList[event].forEach (function(func){
                     var indexFunc=this.listenerList[event].indexOf(func);
+                    
                     if (typeof(func)==="function"){
                         func(...params);
                         calledCount++;

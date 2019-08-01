@@ -107,6 +107,6 @@ describe("emit callback",function(){
     })
     it ("emit'e callback parametresi verildi",async function(){
         //console.log(this.testObject.getRandomVariable());
-        await assert.equal(testObject.getRandomVariable(),2);
+        assert.equal(testObject.getRandomVariable(),2);
     });
 });

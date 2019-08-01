@@ -57,35 +57,36 @@ class CoreObject{
         // params bir dictionary'dir. her bir fonksiyonun ismine göre parametre listeleri içerir.
         return new Promise((resolve) =>{
             try{
+                var listenerCount=this.listenerCount(event);
                 var calledCount=0;
-            this.listenerList[event].forEach (function(func){
-                var indexFunc=this.listenerList[event].indexOf(func);
-                if (typeof(func)==="function"){
-                    func(...params);
-                    calledCount++;
-                }
-                // bir onceListener listesi var bir kez çağırılacak fonksiyonların listenerList deki index değerleri bu listede tutuluyor
-                //bu listedeki indexlerden biri çalıştırıldı ise fonksiyon siliniyor  
-                try{   
-                    if (this.onceListeners[event].includes(indexFunc)){
-                        this.listenerList[event][indexFunc]=undefined;
-                        var veri=this.onceListeners[event].indexOf(indexFunc);
-                        this.onceListeners[event] = this.onceListeners[event].filter(function(value, index, arr){
-                            return index > veri|| index<veri;                
-                        });
+                this.listenerList[event].forEach (function(func){
+                    var indexFunc=this.listenerList[event].indexOf(func);
+                    if (typeof(func)==="function"){
+                        func(...params);
+                        calledCount++;
                     }
+                    // bir onceListener listesi var bir kez çağırılacak fonksiyonların listenerList deki index değerleri bu listede tutuluyor
+                    //bu listedeki indexlerden biri çalıştırıldı ise fonksiyon siliniyor  
+                    try{   
+                        if (this.onceListeners[event].includes(indexFunc)){
+                            this.listenerList[event][indexFunc]=undefined;
+                            var veri=this.onceListeners[event].indexOf(indexFunc);
+                            this.onceListeners[event] = this.onceListeners[event].filter(function(value, index, arr){
+                                return index > veri|| index<veri;                
+                            });
+                        }
+                    }
+                    catch(err){
+                        //
+                    }
+                },this);
                 }
-                catch(err){
-                    //
-                }
-            },this);
-            }
             catch(err){
-            }
+                }
             // burada emit işlemi tamamlandı ise resolve çağırılıyor bu sistemin sorunu çağırılmak istenen fonksiyonların tamamlanıp tamamlanmadığını kontrol etmiyor
-            if (this.listenerCount(event)===calledCount){
+            if (listenerCount===calledCount){
                 resolve(1);            
-            }
+                }
         });
 
     }

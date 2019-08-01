@@ -2,68 +2,93 @@ class CoreObject{
     
     constructor(element){
         this.element=element;
-        this.listenerCount=0;
+        
         this.listenerList={};
         this.onceListeners={};
        
     }
-    
-    on(event,...params){
-        // her bir parametre bir fonksiyondur. event hangi aksiyon olduğunu belirtir.
-        params.forEach(function(func){
-            //listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
-            var checkUndefined=false;
-            try{
-                checkUndefined=this.listenerList[event].includes(undefined);
-                if (checkUndefined){
-                    var indexUndefined=this.listenerList[event].indexOf(undefined);
+    listenerCount(event){
+        var listenerCountVar=0;
+        try{
+            for (let i=0;i<this.listenerList[event].length;i++){
+                if (this.listenerList[event][i]!==undefined){
+                    listenerCountVar++;
                 }
-            }catch(err){//
             }
-            // anonim fonksiyonların silme işlemi gerçekleşemeyeceği için tek seferlik olarak tanımlanır.
-            if (func.name===""){
-                this.once(event,func);
-            }
-            else{
-                if (event in this.listenerList){
-                    if(!checkUndefined){
-                        this.listenerList[event].push(func);
+        }catch(err){}
+        return listenerCountVar
+    }
+    on(event,...params){
+            
+            // her bir parametre bir fonksiyondur. event hangi aksiyon olduğunu belirtir.
+            params.forEach(function(func){
+                //listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
+                var checkUndefined=false;
+                try{
+                    checkUndefined=this.listenerList[event].includes(undefined);
+                    if (checkUndefined){
+                        var indexUndefined=this.listenerList[event].indexOf(undefined);
                     }
-                    else{
-                        //undefined içeren adrese ekleniyor.
-                        this.listenerList[event][indexUndefined]=func;
-                    }
+                }catch(err){//
+                }
+                // anonim fonksiyonların silme işlemi gerçekleşemeyeceği için tek seferlik olarak tanımlanır.
+                if (func.name===""){
+                    this.once(event,func);
                 }
                 else{
-                    this.listenerList[event]=[func];
+                    if (event in this.listenerList){
+                        if(!checkUndefined){
+                            this.listenerList[event].push(func);
+                        }
+                        else{
+                            //undefined içeren adrese ekleniyor.
+                            this.listenerList[event][indexUndefined]=func;
+                        }
+                    }
+                    else{
+                        this.listenerList[event]=[func];
+                    }
                 }
-            }
-        },this);
+            },this);
     }
-    emit(event,...params){
+    async emit(event,...params){
         // bu kısımda evente verilmiş olan fonksiyonlara göre parametreler alınır
         // mutualParams değişkeni bütün fonksiyonlara gönderilecek olan değişkenleri içerir liste haline parametre olarak alınır
         // params bir dictionary'dir. her bir fonksiyonun ismine göre parametre listeleri içerir.
-        this.listenerList[event].forEach (function(func){
-            var indexFunc=this.listenerList[event].indexOf(func);
-            if (typeof(func)==="function"){
-                func(...params);
-            }
-            // bir onceListener listesi var bir kez çağırılacak fonksiyonların listenerList deki index değerleri bu listede tutuluyor
-            //bu listedeki indexlerden biri çalıştırıldı ise fonksiyon siliniyor  
-            try{   
-                if (this.onceListeners[event].includes(indexFunc)){
-                    this.listenerList[event][indexFunc]=undefined;
-                    var veri=this.onceListeners[event].indexOf(indexFunc);
-                    this.onceListeners[event] = this.onceListeners[event].filter(function(value, index, arr){
-                        return index > veri|| index<veri;                
-                    });
+        return new Promise((resolve) =>{
+            try{
+                var calledCount=0;
+            this.listenerList[event].forEach (function(func){
+                var indexFunc=this.listenerList[event].indexOf(func);
+                if (typeof(func)==="function"){
+                    func(...params);
+                    calledCount++;
                 }
+                // bir onceListener listesi var bir kez çağırılacak fonksiyonların listenerList deki index değerleri bu listede tutuluyor
+                //bu listedeki indexlerden biri çalıştırıldı ise fonksiyon siliniyor  
+                try{   
+                    if (this.onceListeners[event].includes(indexFunc)){
+                        this.listenerList[event][indexFunc]=undefined;
+                        var veri=this.onceListeners[event].indexOf(indexFunc);
+                        this.onceListeners[event] = this.onceListeners[event].filter(function(value, index, arr){
+                            return index > veri|| index<veri;                
+                        });
+                    }
+                }
+                catch(err){
+                    //
+                }
+            },this);
             }
             catch(err){
-                //
+                
             }
-        },this);
+            if (this.listenerCount(event)===calledCount){
+                console.log("geldi eşleşme");
+                resolve(1);            
+            }
+        });
+
     }
     remove(event,fonk){
         //bir event verilir ve fonksiyon isimleri içeren bir liste verilir.

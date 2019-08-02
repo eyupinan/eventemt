@@ -96,17 +96,19 @@ describe("emit callback",function(){
     var testObject=new Test(0);
     before(async function(){
         event.on("click",function fonk(param){
+            setTimeout(function(){
                 testObject.setRandomVariable(testObject.getRandomVariable()+1);
-                param();
-            
+                param();  
+            },2000);
         });
         await event.emit("click",function(){
             testObject.setRandomVariable(testObject.getRandomVariable()+1);
         });
        
     })
-    it ("emit'e callback parametresi verildi",async function(){
-        //console.log(this.testObject.getRandomVariable());
+    it ("emit'e callback parametresi verildi",function(done){
+        done();
         assert.equal(testObject.getRandomVariable(),2);
+        
     });
 });

@@ -19,7 +19,9 @@ class CoreObject{
         return listenerCountVar
     }
     on(event,...params){
-            
+        return new Promise((resolve)=>{
+            var funcCount=params.length;
+            var addedCount=0;
             // her bir parametre bir fonksiyondur. event hangi aksiyon olduğunu belirtir.
             params.forEach(function(func){
                 //listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
@@ -32,24 +34,29 @@ class CoreObject{
                 }catch(err){//
                 }
                 // anonim fonksiyonların silme işlemi gerçekleşemeyeceği için tek seferlik olarak tanımlanır.
-                if (func.name===""){
+                /*if (func.name===""){
                     this.once(event,func);
-                }
-                else{
-                    if (event in this.listenerList){
-                        if(!checkUndefined){
-                            this.listenerList[event].push(func);
-                        }
-                        else{
-                            //undefined içeren adrese ekleniyor.
-                            this.listenerList[event][indexUndefined]=func;
-                        }
+                }*/
+                
+                if (event in this.listenerList){
+                    if(!checkUndefined){
+                        this.listenerList[event].push(func);
                     }
                     else{
-                        this.listenerList[event]=[func];
+                        //undefined içeren adrese ekleniyor.
+                        this.listenerList[event][indexUndefined]=func;
                     }
                 }
+                else{
+                    this.listenerList[event]=[func];
+                }
+                addedCount++;
+            
             },this);
+           if (addedCount===funcCount){
+               resolve(1);
+           } 
+        });
     }
     
     async emit(event,...params){
@@ -93,44 +100,63 @@ class CoreObject{
 
     }
     remove(event,fonk){
-        //bir event verilir ve fonksiyon isimleri içeren bir liste verilir.
-        for (let i=0;i<this.listenerList[event].length;i++){
-            if(fonk===this.listenerList[event][i].name){                
-                this.listenerList[event][i]=undefined;    
+        return new Promise ((resolve)=>{
+            //bir event verilir ve fonksiyon isimleri içeren bir liste verilir.
+            var verify=false;
+            for (let i=0;i<this.listenerList[event].length;i++){
+                if(fonk===this.listenerList[event][i].name){                
+                    this.listenerList[event][i]=undefined;    
+                    verify=true;
+                }
+                if (i===this.listenerList[event].length-1){
+                    verify=true;
+                }
             }
-        }
+        
+            if (verify===true){
+                resolve(1);
+            }
+        });
     }
     once(event,...params){
-        params.forEach(function(func){
-            if (event in this.listenerList){
-                //listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
-                var checkUndefined=false;
-                try{
-                    checkUndefined=this.listenerList[event].includes(undefined);
-                    if (checkUndefined){
-                        var indexUndefined=this.listenerList[event].indexOf(undefined);
+        return new Promise((resolve)=>{
+            var funcCount=params.length;
+            var addedCount=0;
+            params.forEach(function(func){
+                if (event in this.listenerList){
+                    //listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
+                    var checkUndefined=false;
+                    try{
+                        checkUndefined=this.listenerList[event].includes(undefined);
+                        if (checkUndefined){
+                            var indexUndefined=this.listenerList[event].indexOf(undefined);
+                        }
+                    }catch(err){//
                     }
-                }catch(err){//
+                    if (!checkUndefined){
+                        this.listenerList[event].push(func);
+                    }
+                    else{
+                        this.listenerList[event][indexUndefined]=func;
+                    }
+                    //onceListeners listesine ekleniyor.
+                    if (event in this.onceListeners){
+                        this.onceListeners[event].push(this.listenerList[event].indexOf(func));
+                    }
+                    else{
+                        this.onceListeners[event]=[this.listenerList[event].indexOf(func)];
+                    }   
                 }
-                if (!checkUndefined){
-                    this.listenerList[event].push(func);
+                else{   
+                    this.listenerList[event]=[func];
+                    this.onceListeners[event]=[0];
                 }
-                else{
-                    this.listenerList[event][indexUndefined]=func;
-                }
-                //onceListeners listesine ekleniyor.
-                if (event in this.onceListeners){
-                    this.onceListeners[event].push(this.listenerList[event].indexOf(func));
-                }
-                else{
-                    this.onceListeners[event]=[this.listenerList[event].indexOf(func)];
-                }   
+                addedCount++;
+            },this);
+            if (funcCount===addedCount){
+                resolve(1);
             }
-            else{   
-                this.listenerList[event]=[func];
-                this.onceListeners[event]=[0];
-            }
-        },this);
+        });
     }
 }
 

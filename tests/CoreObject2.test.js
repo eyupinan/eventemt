@@ -89,7 +89,6 @@ describe("on ve once",function(){
     });
 });
 describe("emit callback",function(){
-    this.timeout(4000);
     const event =new CoreObject();
     const testObject=new Test(0);
     before(async function(){

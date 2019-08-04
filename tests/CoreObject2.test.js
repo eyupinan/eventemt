@@ -74,6 +74,7 @@ describe("on ve once",function(){
     const testObject1=new Test(0);
     const testObject2=new Test(0);
     before(async function(){
+        
         await event.on("click",function fonk(){
             testObject1.setRandomVariable(testObject1.getRandomVariable()+1);
         });

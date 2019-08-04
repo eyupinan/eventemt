@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {CoreObject} = require('../es6/CoreObject');
+const {CoreObject} = require('../src/CoreObject');
 class Test{
     constructor(randomVariable){
         this.randomVariable=randomVariable;

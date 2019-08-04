@@ -103,7 +103,7 @@ class CoreObject{
         return new Promise ((resolve)=>{
             let name="";
             if (typeof(fonk)==="function"){
-                name=fonk.name;
+               name=fonk.name;
             }
             else{
                 name=fonk;
@@ -111,7 +111,7 @@ class CoreObject{
             //bir event verilir ve fonksiyon isimleri içeren bir liste verilir.
             var verify=false;
             for (let i=0;i<this.listenerList[event].length;i++){
-                if(fonk===this.listenerList[event][i].name){                
+                if(name===this.listenerList[event][i].name){                
                     this.listenerList[event][i]=undefined;    
                     verify=true;
                 }

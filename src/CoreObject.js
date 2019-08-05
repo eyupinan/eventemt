@@ -1,5 +1,5 @@
 class CoreObject {
-     constructor () {
+    constructor () {
         this.listenerList = {}
         this.onceListeners = {}
     }

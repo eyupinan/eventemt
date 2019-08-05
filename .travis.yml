@@ -6,4 +6,3 @@ script:
     - npm run lint
 before_script:
     - npm install
-    

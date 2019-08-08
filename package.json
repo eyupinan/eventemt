@@ -1,8 +1,8 @@
 {
   "name": "eventemt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "CoreObject.js",
+  "main": "./src/CoreObject.js",
   "scripts": {
     "test": "mocha **/*.test.js",
     "build": "babel es6 -d es5",

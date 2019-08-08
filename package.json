@@ -7,8 +7,10 @@
     "test": "mocha **/*.test.js",
     "build": "babel es6 -d es5",
     "watch": "webpack --watch",
-    "lint": "eslint ./src/CoreObject.js",
-    "lint-fix": "eslint ./src/CoreObject.js --fix"
+    "lint": "eslint ./src/**/*.js",
+    "lint:test": "eslint ./tests/**/*.js",
+    "lint:fix:test": "eslint ./tests/**/*.js",
+    "lint-fix": "eslint ./src/**/*.js --fix"
   },
   "author": "ibrahim eyyüp inan",
   "license": "unlicense",

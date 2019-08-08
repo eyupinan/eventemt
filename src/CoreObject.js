@@ -19,7 +19,7 @@ class CoreObject {
     }
 
     on (event, ...params) {
-    // her bir parametre bir fonksiyondur. event hangi aksiyon olduğunu belirtir.
+        // her bir parametre bir fonksiyondur. event hangi aksiyon olduğunu belirtir.
         params.forEach(function (func) {
             // listenin içerisinde undefined değer varmı kontrolü yapılıyor . varsa yeni fonksiyon o adrese yazılıyor.
             let checkUndefined = false
@@ -46,9 +46,9 @@ class CoreObject {
     }
 
     emit (event, ...params) {
-    // bu kısımda evente verilmiş olan fonksiyonlara göre parametreler alınır
-    // mutualParams değişkeni bütün fonksiyonlara gönderilecek olan değişkenleri içerir liste haline parametre olarak alınır
-    // params bir dictionary'dir. her bir fonksiyonun ismine göre parametre listeleri içerir.
+        // bu kısımda evente verilmiş olan fonksiyonlara göre parametreler alınır
+        // mutualParams değişkeni bütün fonksiyonlara gönderilecek olan değişkenleri içerir liste haline parametre olarak alınır
+        // params bir dictionary'dir. her bir fonksiyonun ismine göre parametre listeleri içerir.
         try {
             this.listenerList[event].forEach(function (func) {
                 const indexFunc = this.listenerList[event].indexOf(func)
@@ -75,7 +75,7 @@ class CoreObject {
     }
 
     remove (event, fonk) {
-    // bir event verilir ve fonksiyon isimleri içeren bir liste verilir.
+        // bir event verilir ve fonksiyon isimleri içeren bir liste verilir.
         for (let i = 0; i < this.listenerList[event].length; i++) {
             if (fonk === this.listenerList[event][i]) {
                 this.listenerList[event][i] = undefined
